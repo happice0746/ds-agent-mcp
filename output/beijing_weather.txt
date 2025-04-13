@@ -1,0 +1,21 @@
+Weather Forecast for Beijing (Dongcheng District) - Today:
+
+- Current Temperature: 58°F (Feels Like 53°F)
+- High / Low: 58°F / 52°F
+- Wind: 25 mph
+- Humidity: 15%
+- Dew Point: 11°F
+- Pressure: 29.56 in
+- UV Index: 5 of 11
+- Visibility: 6 mi
+- Moon Phase: Full Moon
+
+Forecast:
+- Morning: 54°F
+- Afternoon: 57°F (Chance of Rain: 0%)
+- Evening: 53°F (Chance of Rain: 0%)
+- Overnight: 55°F (Chance of Rain: 0%)
+
+Air Quality: Moderate
+
+Note: Data retrieved from The Weather Channel.

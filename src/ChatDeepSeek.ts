@@ -2,6 +2,7 @@ import OpenAI from "openai"
 import { Tool } from "@modelcontextprotocol/sdk/types.js"
 import { logTitle } from "./logUtils";
 import "dotenv/config"
+import { ChatCompletionAssistantMessageParam } from "openai/resources.mjs";
 class ChatDeepSeek {
   private llm: OpenAI
   private model: string
@@ -32,23 +33,27 @@ class ChatDeepSeek {
       messages: this.messages,
       model: this.model,
       stream: true,
-      // tools: this.getToolsDefinition(),
+      tools: this.getToolsDefinition(),
     });
     let content = "";
     let toolCalls = [];
     logTitle("RESPONSE")
     for await (const chunk of stream) {
       let delta = chunk.choices[0].delta;
+      if (delta.content) {
+        content+=delta.content;
+        process.stdout.write(delta.content)
+      }
       if (delta.tool_calls) {
         for(const toolCallChunk of delta.tool_calls) {
           if (toolCalls.length <= toolCallChunk.index) {
             toolCalls.push({id:"", function:{name:"", arguments:""}})
           }
+          let currentCall = toolCalls[toolCallChunk.index];
+          if (toolCallChunk.id) currentCall.id += toolCallChunk.id;
+          if (toolCallChunk.function?.name) currentCall.function.name += toolCallChunk.function.name;
+          if (toolCallChunk.function?.arguments) currentCall.function.arguments += toolCallChunk.function.arguments;
         }
-      }
-      if (delta.content) {
-        content+=delta.content;
-        process.stdout.write(delta.content)
       }
     }
     this.messages.push({ 
@@ -58,7 +63,7 @@ class ChatDeepSeek {
         id: call.id, 
         type: "function", 
         function: call.function
-      }))});
+    }))});
     return {content, toolCalls}
   }
 
